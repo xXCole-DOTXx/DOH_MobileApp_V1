@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { Button, View, Text, StyleSheet, TextInput, Picker } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, View, Text, TextInput, Picker } from 'react-native';
 import { styles } from './styles.js';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -13,26 +13,42 @@ const FormSubmit = ({navigation, route}) => {
     const [Comments, onChangeComments] = useState("Comments");
     const [RoadName, onChangeRoadName] = useState("");
     const [image, setImage] = useState(null);
+    const [hasPermission, setHasPermission] = useState(null);
 
     const counties = ["Barbour", "Berkeley", "Boone", "Braxton", "Brooke", "Cabell", "Calhoun", "Clay", "Doddridge", "Fayette", "Gilmer", "Grant", "Greenbrier", "Hampshire", "Hancock", "Hardy",
                     "Harrison", "Jackson", "Jefferson", "Kanawha", "Lewis", "Lincoln", "Logan", "Marion", "Marshall", "Mason", "Mercer", "Mineral", "Mingo", "Monongalia", "Monroe", "Morgan", "McDowell",
                     "Nicholas", "Ohio", "Pendleton", "Pleasants", "Pocahontas", "Preston", "Putnam", "Raleigh", "Randolph", "Ritchie", "Roane", "Summers", "Taylor", "Tucker", "Tyler", "Upshur", "Wayne", 
                     "Webster", "Wetzel", "Wirt", "Wood", "Wyoming"]
 
-     const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-        });
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      });
 
-        console.log(result);
+      console.log(result);
 
-        if (!result.cancelled) {
-        setImage(result.uri);
-        }
+      if (!result.cancelled) {
+      setImage(result.uri);
+      }
   };
+
+  const takeImage = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+    setImage(result.uri);
+    }
+};
 
   //This needs to happen when I press the button I think but it doesnt really seem to work if I dp.
   useEffect(() => {
@@ -43,8 +59,17 @@ const FormSubmit = ({navigation, route}) => {
           alert('Sorry, we need camera roll permissions to make this work!');
         }
       }
+      const {status} = await ImagePicker.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
     })();
   }, []);
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
 
   return (
     <View style={styles.container}>
@@ -120,6 +145,7 @@ const FormSubmit = ({navigation, route}) => {
         </View>
 
         <Button title="Pick an image from camera roll" onPress={pickImage} />
+        <Button title="Take a picture" onPress={takeImage} />
 
         <Button
                 style = {styles.button}
