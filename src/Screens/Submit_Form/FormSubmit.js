@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, View, Text, TextInput, Picker } from 'react-native';
 import { styles } from './styles.js';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 
 const FormSubmit = ({navigation, route}) => {
     const [Name, onChangeName] = useState(null);
@@ -96,6 +96,27 @@ const FormSubmit = ({navigation, route}) => {
       }).then(data => console.log(data));
     }
 
+    const SaveToPhone = async (item) => {
+      // Remember, here item is a file uri which looks like this. file://..
+      const permission = await MediaLibrary.requestPermissionsAsync();
+      if (permission.granted) {
+        try {
+          const asset = await MediaLibrary.createAssetAsync(item);
+          MediaLibrary.createAlbumAsync('Images', asset, false)
+            .then(() => {
+              console.log('File Saved Successfully!');
+            })
+            .catch(() => {
+              console.log('Error In Saving File!');
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        console.log('Need Storage permission to save file');
+      }
+    };
+
 
 
   return (
@@ -177,7 +198,8 @@ const FormSubmit = ({navigation, route}) => {
         <Button
                 style = {styles.button}
                 title="Submit"
-                        onPress={ async () => {
+                        onPress={() => {
+                          SaveToPhone(image);
                           postForm();
                         //   await FileSystem.moveAsync({
                         //     from: image,
