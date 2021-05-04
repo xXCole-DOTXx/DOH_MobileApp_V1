@@ -5,13 +5,13 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 
 const FormSubmit = ({navigation, route}) => {
-    const [Name, onChangeName] = useState("Full Name");
-    const [Phone, onChangePhone] = useState("Phone");
-    const [Email, onChangeEmail] = useState("Email");
-    const [selectedValue, setSelectedValue] = useState("Choose..");
-    const [MileMarker, onChangeMileMarker] = useState("");
-    const [Comments, onChangeComments] = useState("Comments");
-    const [RoadName, onChangeRoadName] = useState("");
+    const [Name, onChangeName] = useState(null);
+    const [Phone, onChangePhone] = useState(null);
+    const [Email, onChangeEmail] = useState(null);
+    const [selectedValue, setSelectedValue] = useState(null);
+    const [MileMarker, onChangeMileMarker] = useState(null);
+    const [Comments, onChangeComments] = useState(null);
+    const [RoadName, onChangeRoadName] = useState(null);
     const [image, setImage] = useState(null);
     const [hasPermission, setHasPermission] = useState(null);
 
@@ -33,22 +33,22 @@ const FormSubmit = ({navigation, route}) => {
       if (!result.cancelled) {
       setImage(result.uri);
       }
-  };
+    };
 
-  const takeImage = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 1,
-    });
+    const takeImage = async () => {
+      let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      });
 
-    console.log(result);
+      console.log(result);
 
-    if (!result.cancelled) {
-    setImage(result.uri);
-    }
-};
+      if (!result.cancelled) {
+      setImage(result.uri);
+      }
+    };
 
   //This needs to happen when I press the button I think but it doesnt really seem to work if I dp.
   useEffect(() => {
@@ -70,6 +70,33 @@ const FormSubmit = ({navigation, route}) => {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
+    //POST a new form to the database
+    const postForm = async () =>{
+      console.log(MileMarker);
+      fetch('http://10.0.2.2:5000/forms', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Name: Name,
+          Phone: Phone,
+          Email: Email,
+          County: selectedValue,
+          RoadName: RoadName,
+          MileMarker: MileMarker,
+          Comments: Comments
+        })
+      }).then(response =>{
+        if(response.ok){
+          return response.json();
+        }
+      }).then(data => console.log(data));
+    }
+
+
 
   return (
     <View style={styles.container}>
@@ -150,13 +177,12 @@ const FormSubmit = ({navigation, route}) => {
         <Button
                 style = {styles.button}
                 title="Submit"
-                        onPress={() => {
-                             navigation.navigate('', {
-                              screen: '',
-                              params: {
-                                playerName: selectedValue
-                              }
-                            });
+                        onPress={ async () => {
+                          postForm();
+                        //   await FileSystem.moveAsync({
+                        //     from: image,
+                        //     to: FileSystem.documentDirectory + 'Images/'
+                        // });
                         }}
                 color="#19AC52"
             />

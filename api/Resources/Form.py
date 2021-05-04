@@ -5,6 +5,7 @@ from flask import jsonify
 from models.Models import Forms
 from Schemas.Form import FormSchema, form_schema, forms_schema
 from marshmallow import ValidationError
+from extensions import db
 
 class FormListResource(Resource):
     def get(self):
@@ -21,9 +22,14 @@ class FormListResource(Resource):
         json_data = request.get_json()
 
         #Create a new Form using Marshmallow
-        new_form = Form(
+        new_form = Forms(
             Name=request.json['Name'],
-            Age=request.json['Age']
+            Phone=request.json['Phone'],
+            Email=request.json['Email'],
+            County=request.json['County'],
+            RoadName=request.json['RoadName'],
+            MileMarker=request.json['MileMarker'],
+            Comments=request.json['Comments']
         )
         db.session.add(new_form)
         db.session.commit()
