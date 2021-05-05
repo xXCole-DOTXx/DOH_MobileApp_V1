@@ -22,28 +22,15 @@ const FormsScreen = ({navigation, route}) => {
         keyExtractor={(item) => item.ID }
         data={formsArray}
         renderItem={({item}) => (
-          <Text>{item.Name}</Text>
+          <Card>
+            <Card.Title>{item.ID}</Card.Title>
+            <Card.Divider/>
+            <View>
+              <Text>{item.Name}</Text>
+            </View>
+          </Card>
         )}
         />
-
-    <Card>
-      <Card.Title>CARD WITH DIVIDER</Card.Title>
-      <Card.Divider/>
-      {
-        formsArray.map((u, i) => {
-          return (
-            <View key={i}>
-              <Text>{u.ID}</Text>
-              <Text>{u.Name}</Text>
-              <Text>{u.Phone}</Text>
-              <Text>{u.Email}</Text>
-            </View>
-          );
-        })
-      }
-    </Card>
-
-
     </ScrollView>
   );
 }
