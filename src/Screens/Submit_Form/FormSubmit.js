@@ -201,10 +201,6 @@ const FormSubmit = ({navigation, route}) => {
                         onPress={() => {
                           SaveToPhone(image);
                           postForm();
-                        //   await FileSystem.moveAsync({
-                        //     from: image,
-                        //     to: FileSystem.documentDirectory + 'Images/'
-                        // });
                         }}
                 color="#19AC52"
             />

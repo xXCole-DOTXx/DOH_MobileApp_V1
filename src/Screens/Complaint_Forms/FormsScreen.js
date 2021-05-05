@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { Button, View, Text, StyleSheet, Image, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, ScrollView } from 'react-native';
+import { Card } from 'react-native-elements'
 
 const FormsScreen = ({navigation, route}) => {
 
-  const [usersArray, setUsersArray] = useState([]);
-  const nameArray = [];
+  const [formsArray, setFormsArray] = useState([]);
   
   //Fetch all users from database
   useEffect(() =>{
@@ -12,32 +12,39 @@ const FormsScreen = ({navigation, route}) => {
       if(response.ok){
         return response.json();
       }
-    }).then(data => setUsersArray(data));
+    }).then(data => setFormsArray(data));
   }, []);
 
-  for(var i=0; i<usersArray.length; i++){
-    nameArray.push(usersArray[i].Name);
-  }
-
-  const listUsers = usersArray.map((user) =>
-    <li>{user}</li>
-    );
-
-  const listNames = nameArray.map((name) =>
-     <Text>{name}</Text>
-  );
-
   return (
-    <View>
+    <ScrollView>
         <Text>WV DOT Employees.</Text>
         <FlatList 
         keyExtractor={(item) => item.ID }
-        data={usersArray}
+        data={formsArray}
         renderItem={({item}) => (
           <Text>{item.Name}</Text>
         )}
         />
-    </View>
+
+    <Card>
+      <Card.Title>CARD WITH DIVIDER</Card.Title>
+      <Card.Divider/>
+      {
+        formsArray.map((u, i) => {
+          return (
+            <View key={i}>
+              <Text>{u.ID}</Text>
+              <Text>{u.Name}</Text>
+              <Text>{u.Phone}</Text>
+              <Text>{u.Email}</Text>
+            </View>
+          );
+        })
+      }
+    </Card>
+
+
+    </ScrollView>
   );
 }
 
