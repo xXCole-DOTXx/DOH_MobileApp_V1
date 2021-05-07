@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button, View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, Image, ImageBackground } from 'react-native';
 import { styles } from './styles.js';
-import { logo2 } from '../../Assets/WVDOT.png'
 
 const HomeScreen = ({navigation, route}) => {
     const [temp, setTemp] = useState("");

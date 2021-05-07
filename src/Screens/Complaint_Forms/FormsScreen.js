@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ScrollView } from 'react-native';
+import { View, Text, FlatList, ScrollView, ImageBackground } from 'react-native';
 import { Card } from 'react-native-elements'
 import { styles } from './styles.js';
+import { image } from '../../Assets/wvu.png'
 
 const FormsScreen = ({navigation, route}) => {
 
@@ -17,10 +18,8 @@ const FormsScreen = ({navigation, route}) => {
   }, []);
 
   return (
-    <ScrollView>
-        <Text>WV DOT Employees.</Text>
         <FlatList 
-        keyExtractor={(item) => item.ID }
+        keyExtractor={(item) => item.ID.toString() }
         style = {styles.List}
         data={formsArray}
         renderItem={({item}) => (
@@ -28,9 +27,9 @@ const FormsScreen = ({navigation, route}) => {
             <Card.Title>{item.ID}</Card.Title>
             <Card.Divider/>
             <View style={styles.Container}>
-              <Text style={styles.Comments}>{item.Comments}</Text>
+              <Text>{item.Comments}</Text>
            
-              <Text style={styles.Comments}>{item.RoadName}</Text>
+              <Text>{item.RoadName}</Text>
             </View>
 
             <View style={styles.ListContainer}>
@@ -46,7 +45,7 @@ const FormsScreen = ({navigation, route}) => {
           </Card>
         )}
         />
-    </ScrollView>
+
   );
 }
 

@@ -19,12 +19,6 @@ const styles = StyleSheet.create({
         padding: 10,
         fontWeight: "bold"
     },
-    Comments: {
-
-    },
-    Image: {
-
-    },
     List: {
         flex: 1,
         padding: 10
