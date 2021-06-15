@@ -10,7 +10,7 @@ class Forms(db.Model):
     RoadName = db.Column(db.String(100))
     MileMarker = db.Column(db.Float)
     Comments = db.Column(db.String(100))
-    Path = db.Column(db.String(50))
+    Path = db.Column(db.String(4000))
 
     def __repr__(self):
         return '<Form %s>' % self.Name

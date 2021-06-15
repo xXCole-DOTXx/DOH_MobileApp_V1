@@ -6,6 +6,7 @@ from models.Models import Forms
 from Schemas.Form import FormSchema, form_schema, forms_schema
 from marshmallow import ValidationError
 from extensions import db
+import boto3
 
 class FormListResource(Resource):
     def get(self):
@@ -29,10 +30,15 @@ class FormListResource(Resource):
             County=request.json['County'],
             RoadName=request.json['RoadName'],
             MileMarker=request.json['MileMarker'],
-            Comments=request.json['Comments']
+            Comments=request.json['Comments'],
+            Path=request.json['Path']
         )
         db.session.add(new_form)
         db.session.commit()
+
+        s3 = boto3.client('s3')
+        s3.upload_file('C:/Users/e096752/Downloads/pothole1.jpg', 'rn-mobile-app-bucket', 'Uploaded Photos/test8978.png') #this does not work. The path variable isnt accepted
+
         return form_schema.dump(new_form)
 
     def delete(self):

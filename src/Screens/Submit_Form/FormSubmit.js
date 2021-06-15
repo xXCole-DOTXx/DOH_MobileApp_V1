@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment} from 'react';
 import { Button, View, Text, TextInput, Picker } from 'react-native';
+import { Header } from 'react-native-elements';
 import { styles } from './styles.js';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
+import { RNS3 } from 'react-native-aws3';
 
 const FormSubmit = ({navigation, route}) => {
     const [Name, onChangeName] = useState(null);
@@ -19,36 +21,6 @@ const FormSubmit = ({navigation, route}) => {
                     "Harrison", "Jackson", "Jefferson", "Kanawha", "Lewis", "Lincoln", "Logan", "Marion", "Marshall", "Mason", "Mercer", "Mineral", "Mingo", "Monongalia", "Monroe", "Morgan", "McDowell",
                     "Nicholas", "Ohio", "Pendleton", "Pleasants", "Pocahontas", "Preston", "Putnam", "Raleigh", "Randolph", "Ritchie", "Roane", "Summers", "Taylor", "Tucker", "Tyler", "Upshur", "Wayne", 
                     "Webster", "Wetzel", "Wirt", "Wood", "Wyoming"]
-
-    const pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-      });
-
-      console.log(result);
-
-      if (!result.cancelled) {
-      setImage(result.uri);
-      }
-    };
-
-    const takeImage = async () => {
-      let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-      });
-
-      console.log(result);
-
-      if (!result.cancelled) {
-      setImage(result.uri);
-      }
-    };
 
   //This needs to happen when I press the button I think but it doesnt really seem to work if I dp.
   useEffect(() => {
@@ -71,9 +43,39 @@ const FormSubmit = ({navigation, route}) => {
     return <Text>No access to camera</Text>;
   }
 
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      });
+      console.log(result);
+      if (!result.cancelled) {
+        setImage(result);
+      }
+
+    };
+
+    const takeImage = async () => {
+      let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      });
+      console.log(result);
+      if (!result.cancelled) {
+      setImage(result.uri);
+      }
+    };
+
     //POST a new form to the database
     const postForm = async () =>{
-      console.log(MileMarker);
+      const photoData = new FormData();
+        photoData.append('file', image[0]);
+        photoData.append('filename', image.fileName.value);
+
       fetch('http://10.0.2.2:5000/forms', {
         method: 'POST',
         headers: {
@@ -87,7 +89,9 @@ const FormSubmit = ({navigation, route}) => {
           County: selectedValue,
           RoadName: RoadName,
           MileMarker: MileMarker,
-          Comments: Comments
+          Comments: Comments,
+          Path: "",
+          //Image: image
         })
       }).then(response =>{
         if(response.ok){
@@ -96,32 +100,34 @@ const FormSubmit = ({navigation, route}) => {
       }).then(data => console.log(data));
     }
 
-    const SaveToPhone = async (item) => {
-      // Remember, here item is a file uri which looks like this. file://..
-      const permission = await MediaLibrary.requestPermissionsAsync();
-      if (permission.granted) {
-        try {
-          const asset = await MediaLibrary.createAssetAsync(item);
-          MediaLibrary.createAlbumAsync('Images', asset, false)
-            .then(() => {
-              console.log('File Saved Successfully!');
-            })
-            .catch(() => {
-              console.log('Error In Saving File!');
-            });
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        console.log('Need Storage permission to save file');
+    //Save image to AWS S3 bucket
+    const saveImage = async () => {
+      const file = {
+        uri: image,
+        name: Name, //This needs to be a better naming convention
+        type: 'image/png'
       }
-    };
-
-
+      console.log("File: " + file); 
+      const config = {
+        keyPrefix: 'Uploaded Photos/',
+        bucket: 'rn-mobile-app-bucket',
+        region: 'us-east-2',
+        accessKey: 'AKIA3OOUK4FCMI33OUFG',
+        secretKey: '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',
+        successActionStatus: 201
+      }
+      RNS3.put(file, config).then((response) => {
+        console.log(response);
+      });
+    }
 
   return (
     <View style={styles.container}>
-        <Text>Submit a complaint form.</Text>
+        <Header
+          //leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{ text: 'Create request', style: { color: '#fff', fontSize: 25} }}
+          //rightComponent={{ icon: 'home', color: '#fff' }}
+        />
 
         <View style={styles.rowContainer}>
             <Text style={styles.myText}>Name</Text>
@@ -199,7 +205,8 @@ const FormSubmit = ({navigation, route}) => {
                 style = {styles.button}
                 title="Submit"
                         onPress={() => {
-                          SaveToPhone(image);
+                          // SaveToPhone(image);
+                          //saveImage();
                           postForm();
                         }}
                 color="#19AC52"
@@ -210,3 +217,26 @@ const FormSubmit = ({navigation, route}) => {
 }
 
 export default FormSubmit;
+
+    //Save the image locally on the phone
+
+    // const SaveToPhone = async (item) => {
+    //   // Remember, here item is a file uri which looks like this. file://..
+    //   const permission = await MediaLibrary.requestPermissionsAsync();
+    //   if (permission.granted) {
+    //     try {
+    //       const asset = await MediaLibrary.createAssetAsync(item);
+    //       MediaLibrary.createAlbumAsync('AppPhotos', asset, false)
+    //         .then(() => {
+    //           console.log('File Saved Successfully!');
+    //         })
+    //         .catch(() => {
+    //           console.log('Error In Saving File!');
+    //         });
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   } else {
+    //     console.log('Need Storage permission to save file');
+    //   }
+    // };

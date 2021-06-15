@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ImageBackground } from 'react-native';
+import { Header } from 'react-native-elements';
 import { styles } from './styles.js';
 
 const HomeScreen = ({navigation, route}) => {
@@ -19,6 +20,11 @@ const HomeScreen = ({navigation, route}) => {
 
     return (
         <View style={styles.container}>
+          <Header
+          //leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{ text: 'WV DOT Work Request', style: { color: '#fff', fontSize: 25} }}
+          //rightComponent={{ icon: 'home', color: '#fff' }}
+        />
             <Image style={styles.Image} source={require('../../Assets/transportation.png')}/>
             <Text>Home Screen</Text>
             <Text>Temperature in Charleston WV (Kelvin): {temp}</Text>

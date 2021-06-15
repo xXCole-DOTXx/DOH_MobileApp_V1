@@ -1,34 +1,103 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ScrollView, ImageBackground } from 'react-native';
-import { Card } from 'react-native-elements'
+import { View, Text, FlatList, SafeAreaView, TextInput } from 'react-native';
+import { Card, Header } from 'react-native-elements'
 import { styles } from './styles.js';
-import { image } from '../../Assets/wvu.png'
+import filter from 'lodash.filter';
 
 const FormsScreen = ({navigation, route}) => {
 
-  const [formsArray, setFormsArray] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [query, setQuery] = useState('');
+  const [fullData, setFullData] = useState([]);
   
-  //Fetch all users from database
+  //Fetch all formsfrom database
   useEffect(() =>{
+    setIsLoading(true);
     fetch('http://10.0.2.2:5000/forms').then(response =>{
       if(response.ok){
         return response.json();
       }
-    }).then(data => setFormsArray(data));
+    }).then(data => setFullData(data)).then(setIsLoading(false));
   }, []);
 
+
+  function renderHeader() {
+    return (
+      <View
+        style={{
+          backgroundColor: '#fff',
+          padding: 10,
+          marginVertical: 10,
+          borderRadius: 20
+        }}
+      >
+        <TextInput
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="always"
+          value={query}
+          onChangeText={queryText => handleSearch(queryText)}
+          placeholder="Search"
+          style={{ backgroundColor: '#fff', paddingHorizontal: 20 }}
+        />
+      </View>
+    );
+  }
+
+  const handleSearch = text => {
+  const formattedQuery = text.toLowerCase();
+  const filteredData = filter(fullData, form => {
+    return contains(form, formattedQuery);
+  });
+  setData(filteredData);
+  setQuery(text);
+};
+
+const contains = ({ ID }, query) => {
+  console.log("ID was: "+ID);
+  console.log("Query was: "+query);
+  const id = ID;
+  console.log('id was: '+id);
+  if (id.toString().includes(query)) {
+    return true;
+  }
+
+  return false;
+};
+
+
+
+
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#5500dc" />
+      </View>
+    );
+  }
+  else{
   return (
+
+      <SafeAreaView>
+        <Header
+          //leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{ text: 'Request Forms', style: { color: '#fff', fontSize: 25} }}
+          //rightComponent={{ icon: 'home', color: '#fff' }}
+        />
+   
         <FlatList 
+        ListHeaderComponent={renderHeader}
         keyExtractor={(item) => item.ID.toString() }
-        style = {styles.List}
-        data={formsArray}
+        data={query?data:fullData}
         renderItem={({item}) => (
           <Card>
             <Card.Title>{item.ID}</Card.Title>
             <Card.Divider/>
             <View style={styles.Container}>
               <Text>{item.Comments}</Text>
-           
+              {/* <Image source={require('./System apps/Media Manager/Gallery/AppPhotos/45e5cefd-7798-4fe9-88de-86a0a15b7b9f.jpg')} /> */}
               <Text>{item.RoadName}</Text>
             </View>
 
@@ -45,8 +114,10 @@ const FormsScreen = ({navigation, route}) => {
           </Card>
         )}
         />
+     </SafeAreaView>
 
   );
+  } 
 }
 
 export default FormsScreen;

@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         borderWidth: 1,
         width: 200
-      }
+      },
   })
 
-  export {styles}
+  export {styles} 

@@ -31,7 +31,9 @@ createBottomTabs = () =>
 export default function App() {
   return (
       <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{
+          headerShown: false
+      }}>
         <Stack.Screen name="WV DOT" component={HomeScreen, createBottomTabs} />
         <Stack.Screen name="Complaint Forms" component={FormsScreen} />
         <Stack.Screen name="Form Submit" component={FormSubmit} />
