@@ -5,11 +5,6 @@ import { styles } from './styles.js';
 
 const ThankYou = ({navigation, route}) => {
 
-    //Weather api fetch
-    useEffect(() => {
-      
-    }, []);
-
     return (
         <View style={styles.container}>
           <Header

@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'yellow',
         alignItems: 'center',
     },
 
@@ -16,12 +15,6 @@ const styles = StyleSheet.create({
       margin: 12,
       width: 200,
       borderWidth: 1,
-    },
-
-    myText: {
-        fontSize: 15,
-        fontWeight: "bold",
-        marginTop: 20
     },
 
     charPicker: {

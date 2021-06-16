@@ -87,8 +87,7 @@ const FormSubmit = ({navigation, route}) => {
           RoadName: RoadName,
           MileMarker: MileMarker,
           Comments: Comments,
-          Path: "https://rn-mobile-app-bucket.s3.us-east-2.amazonaws.com/Uploaded+Photos/" + Name + Phone,
-          //Image: image
+          Path: "https://rn-mobile-app-bucket.s3.us-east-2.amazonaws.com/Uploaded+Photos/" + Name + Phone
         })
       }).then(response =>{
         if(response.ok){
@@ -127,27 +126,27 @@ const FormSubmit = ({navigation, route}) => {
         />
 
         <View style={styles.rowContainer}>
-            <Text style={styles.myText}>Name</Text>
             <TextInput
             style={styles.input}
+            placeholder = "Name"
             onChangeText={onChangeName}
             value={Name}
             />
         </View>
 
         <View style={styles.rowContainer}>
-            <Text style={styles.myText}>Phone</Text>
             <TextInput
             style={styles.input}
+            placeholder = "Phone"
             onChangeText={onChangePhone}
             value={Phone}
             />
         </View>
 
         <View style={styles.rowContainer}>
-            <Text style={styles.myText}>Email</Text>
             <TextInput
             style={styles.input}
+            placeholder = "Email"
             onChangeText={onChangeEmail}
             value={Email}
             />
@@ -167,27 +166,27 @@ const FormSubmit = ({navigation, route}) => {
         </View>
 
         <View style={styles.rowContainer}>
-            <Text style={styles.myText}>Mile Marker</Text>
             <TextInput
             style={styles.input}
+            placeholder = "Mile Marker"
             onChangeText={onChangeMileMarker}
             value={MileMarker}
             />
         </View>
 
         <View style={styles.rowContainer}>
-            <Text style={styles.myText}>Road Name</Text>
             <TextInput
             style={styles.input}
+            placeholder = "Road Name"
             onChangeText={onChangeRoadName}
             value={RoadName}
             />
         </View>
 
         <View style={styles.rowContainer}>
-            <Text style={styles.myText}>Comments</Text>
             <TextInput
             style={styles.textArea}
+            placeholder = "Describe the problem..."
             numberOfLines={10}
             multiline={true}
             onChangeText={onChangeComments}
@@ -195,8 +194,8 @@ const FormSubmit = ({navigation, route}) => {
             />
         </View>
 
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
-        <Button title="Take a picture" onPress={takeImage} />
+        <Button title="Camera Roll" onPress={pickImage} />
+        <Button title="Camera" onPress={takeImage} />
 
         <Button
                 style = {styles.button}

@@ -22,11 +22,6 @@ const FormsScreen = ({navigation, route}) => {
     }).then(data => setFullData(data)).then(setIsLoading(false));
   }, []);
 
-  for(var i=0; i<fullData.length;i++){
-    console.log(fullData[i].Path);
-  }
-
-
   function renderHeader() {
     return (
       <View
@@ -80,7 +75,6 @@ const contains = ({ ID }, query) => {
   }
   else{
   return (
-
       <SafeAreaView>
         <Header
           //leftComponent={{ icon: 'menu', color: '#fff' }}
@@ -102,6 +96,7 @@ const contains = ({ ID }, query) => {
               {/* <Image style={styles.Image} source={require('../../Assets/transportation.png')} alt="No photo found" /> */}
               <Image style={styles.Image} source={{uri: item.Path}} alt="No photo found" />
               <Text>{item.RoadName}</Text>
+              <Text>{item.County + " County"}</Text>
             </View>
 
             <View style={styles.ListContainer}>

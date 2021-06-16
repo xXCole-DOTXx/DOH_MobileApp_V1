@@ -28,6 +28,7 @@ const HomeScreen = ({navigation, route}) => {
             <Image style={styles.Image} source={require('../../Assets/transportation.png')}/>
             <Text>Home Screen</Text>
             <Text>Temperature in Charleston WV (Kelvin): {temp}</Text>
+            <Image style={styles.Image2} source={require('../../Assets/WVDOT.png')}/>
         </View>
     )
 }
