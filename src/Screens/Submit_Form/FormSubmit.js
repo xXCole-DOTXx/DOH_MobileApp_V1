@@ -1,10 +1,11 @@
-import React, { useEffect, useState, Fragment} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, View, Text, TextInput, Picker } from 'react-native';
 import { Header } from 'react-native-elements';
 import { styles } from './styles.js';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import { RNS3 } from 'react-native-aws3';
+import { NavigationContainer, useNavigation, useRoute } from '@react-navigation/native';
 
 const FormSubmit = ({navigation, route}) => {
     const [Name, onChangeName] = useState(null);
@@ -52,7 +53,7 @@ const FormSubmit = ({navigation, route}) => {
       });
       console.log(result);
       if (!result.cancelled) {
-        setImage(result);
+        setImage(result.uri);
       }
 
     };
@@ -72,9 +73,9 @@ const FormSubmit = ({navigation, route}) => {
 
     //POST a new form to the database
     const postForm = async () =>{
-      const photoData = new FormData();
-        photoData.append('file', image[0]);
-        photoData.append('filename', image.fileName.value);
+      // const photoData = new FormData();
+      //   photoData.append('file', image[0]);
+      //   photoData.append('filename', image.fileName.value);
 
       fetch('http://10.0.2.2:5000/forms', {
         method: 'POST',
@@ -90,7 +91,7 @@ const FormSubmit = ({navigation, route}) => {
           RoadName: RoadName,
           MileMarker: MileMarker,
           Comments: Comments,
-          Path: "",
+          Path: "https://rn-mobile-app-bucket.s3.us-east-2.amazonaws.com/Uploaded+Photos/" + Name + Phone,
           //Image: image
         })
       }).then(response =>{
@@ -104,7 +105,7 @@ const FormSubmit = ({navigation, route}) => {
     const saveImage = async () => {
       const file = {
         uri: image,
-        name: Name, //This needs to be a better naming convention
+        name: Name + Phone, //This needs to be a better naming convention
         type: 'image/png'
       }
       console.log("File: " + file); 
@@ -205,9 +206,9 @@ const FormSubmit = ({navigation, route}) => {
                 style = {styles.button}
                 title="Submit"
                         onPress={() => {
-                          // SaveToPhone(image);
-                          //saveImage();
+                          saveImage();
                           postForm();
+                          navigation.navigate('ThankYou');
                         }}
                 color="#19AC52"
             />

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, SafeAreaView, TextInput } from 'react-native';
+import { View, Text, FlatList, SafeAreaView, TextInput, Image } from 'react-native';
 import { Card, Header } from 'react-native-elements'
 import { styles } from './styles.js';
 import filter from 'lodash.filter';
+
 
 const FormsScreen = ({navigation, route}) => {
 
@@ -20,6 +21,10 @@ const FormsScreen = ({navigation, route}) => {
       }
     }).then(data => setFullData(data)).then(setIsLoading(false));
   }, []);
+
+  for(var i=0; i<fullData.length;i++){
+    console.log(fullData[i].Path);
+  }
 
 
   function renderHeader() {
@@ -62,12 +67,8 @@ const contains = ({ ID }, query) => {
   if (id.toString().includes(query)) {
     return true;
   }
-
   return false;
 };
-
-
-
 
 
   if (isLoading) {
@@ -97,7 +98,9 @@ const contains = ({ ID }, query) => {
             <Card.Divider/>
             <View style={styles.Container}>
               <Text>{item.Comments}</Text>
-              {/* <Image source={require('./System apps/Media Manager/Gallery/AppPhotos/45e5cefd-7798-4fe9-88de-86a0a15b7b9f.jpg')} /> */}
+              {/* THIS WORKS!! */}
+              {/* <Image style={styles.Image} source={require('../../Assets/transportation.png')} alt="No photo found" /> */}
+              <Image style={styles.Image} source={{uri: item.Path}} alt="No photo found" />
               <Text>{item.RoadName}</Text>
             </View>
 

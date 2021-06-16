@@ -22,7 +22,14 @@ const styles = StyleSheet.create({
     List: {
         flex: 1,
         padding: 10
-    }
+    },
+    Image: {
+        alignItems: 'flex-start',
+        width: 350,
+        height: 300,
+        marginBottom: 10
+        // resizeMode: 'contain'
+      }
 })
 
 export {styles}

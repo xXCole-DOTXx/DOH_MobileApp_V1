@@ -31,13 +31,14 @@ class FormListResource(Resource):
             RoadName=request.json['RoadName'],
             MileMarker=request.json['MileMarker'],
             Comments=request.json['Comments'],
-            Path=request.json['Path']
+            Path=request.json['Path'],
+            #Image=request.json['Image']
         )
         db.session.add(new_form)
         db.session.commit()
 
-        s3 = boto3.client('s3')
-        s3.upload_file('C:/Users/e096752/Downloads/pothole1.jpg', 'rn-mobile-app-bucket', 'Uploaded Photos/test8978.png') #this does not work. The path variable isnt accepted
+        #s3 = boto3.client('s3')
+        #s3.upload_file('C:/Users/e096752/Downloads/pothole1.jpg', 'rn-mobile-app-bucket', 'Uploaded Photos/9878798.png') #this does not work. The path variable isnt accepted
 
         return form_schema.dump(new_form)
 

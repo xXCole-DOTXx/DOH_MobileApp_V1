@@ -8,6 +8,7 @@ import 'react-native-gesture-handler';
 import HomeScreen from './src/Screens/Home/Home';
 import FormsScreen from './src/Screens/Complaint_Forms/FormsScreen';
 import FormSubmit from './src/Screens/Submit_Form/FormSubmit';
+import ThankYou from './src/Screens/ThankYou/ThankYou';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -37,6 +38,7 @@ export default function App() {
         <Stack.Screen name="WV DOT" component={HomeScreen, createBottomTabs} />
         <Stack.Screen name="Complaint Forms" component={FormsScreen} />
         <Stack.Screen name="Form Submit" component={FormSubmit} />
+        <Stack.Screen name="Thank You" component={ThankYou} />
       </Stack.Navigator>
     </NavigationContainer>
   );
