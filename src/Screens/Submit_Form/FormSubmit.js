@@ -5,7 +5,7 @@ import { styles } from './styles.js';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import { RNS3 } from 'react-native-aws3';
-import { NavigationContainer, useNavigation, useRoute } from '@react-navigation/native';
+import Modal from 'react-native-modal';
 
 const FormSubmit = ({navigation, route}) => {
     const [Name, onChangeName] = useState(null);
@@ -17,6 +17,7 @@ const FormSubmit = ({navigation, route}) => {
     const [RoadName, onChangeRoadName] = useState(null);
     const [image, setImage] = useState(null);
     const [hasPermission, setHasPermission] = useState(null);
+    const [isModalVisible, setModalVisible] = useState(false);
 
     const counties = ["Barbour", "Berkeley", "Boone", "Braxton", "Brooke", "Cabell", "Calhoun", "Clay", "Doddridge", "Fayette", "Gilmer", "Grant", "Greenbrier", "Hampshire", "Hancock", "Hardy",
                     "Harrison", "Jackson", "Jefferson", "Kanawha", "Lewis", "Lincoln", "Logan", "Marion", "Marshall", "Mason", "Mercer", "Mineral", "Mingo", "Monongalia", "Monroe", "Morgan", "McDowell",
@@ -54,6 +55,7 @@ const FormSubmit = ({navigation, route}) => {
       console.log(result);
       if (!result.cancelled) {
         setImage(result.uri);
+        toggleModal();
       }
 
     };
@@ -68,6 +70,7 @@ const FormSubmit = ({navigation, route}) => {
       console.log(result);
       if (!result.cancelled) {
       setImage(result.uri);
+      toggleModal();
       }
     };
 
@@ -116,6 +119,10 @@ const FormSubmit = ({navigation, route}) => {
         console.log(response);
       });
     }
+
+    const toggleModal = () => {
+      setModalVisible(!isModalVisible);
+    };
 
   return (
     <View style={styles.container}>
@@ -193,10 +200,7 @@ const FormSubmit = ({navigation, route}) => {
             value={Comments}
             />
         </View>
-
-        <Button title="Camera Roll" onPress={pickImage} />
-        <Button title="Camera" onPress={takeImage} />
-
+        <Button title="Upload Photo" onPress={toggleModal} />
         <Button
                 style = {styles.button}
                 title="Submit"
@@ -207,6 +211,15 @@ const FormSubmit = ({navigation, route}) => {
                         }}
                 color="#19AC52"
             />
+
+      <Modal isVisible={isModalVisible}>
+        <View style={{flex: 1}}>
+          <Text>Hello!</Text>
+          <Button title="Camera Roll" onPress={pickImage} />
+          <Button title="Camera" onPress={takeImage} />
+          <Button title="Cancel" onPress={toggleModal} />
+        </View>
+      </Modal>
 
     </View>
   );
