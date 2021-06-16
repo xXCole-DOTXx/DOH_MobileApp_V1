@@ -38,7 +38,7 @@ export default function App() {
         <Stack.Screen name="WV DOT" component={HomeScreen, createBottomTabs} />
         <Stack.Screen name="Complaint Forms" component={FormsScreen} />
         <Stack.Screen name="Form Submit" component={FormSubmit} />
-        <Stack.Screen name="Thank You" component={ThankYou} />
+        <Stack.Screen name="ThankYou" component={ThankYou} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -23,7 +23,7 @@ const FormSubmit = ({navigation, route}) => {
                     "Nicholas", "Ohio", "Pendleton", "Pleasants", "Pocahontas", "Preston", "Putnam", "Raleigh", "Randolph", "Ritchie", "Roane", "Summers", "Taylor", "Tucker", "Tyler", "Upshur", "Wayne", 
                     "Webster", "Wetzel", "Wirt", "Wood", "Wyoming"]
 
-  //This needs to happen when I press the button I think but it doesnt really seem to work if I dp.
+  //This needs to happen when I press the button I think but it doesnt really seem to work if I do.
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -73,10 +73,6 @@ const FormSubmit = ({navigation, route}) => {
 
     //POST a new form to the database
     const postForm = async () =>{
-      // const photoData = new FormData();
-      //   photoData.append('file', image[0]);
-      //   photoData.append('filename', image.fileName.value);
-
       fetch('http://10.0.2.2:5000/forms', {
         method: 'POST',
         headers: {
@@ -218,26 +214,3 @@ const FormSubmit = ({navigation, route}) => {
 }
 
 export default FormSubmit;
-
-    //Save the image locally on the phone
-
-    // const SaveToPhone = async (item) => {
-    //   // Remember, here item is a file uri which looks like this. file://..
-    //   const permission = await MediaLibrary.requestPermissionsAsync();
-    //   if (permission.granted) {
-    //     try {
-    //       const asset = await MediaLibrary.createAssetAsync(item);
-    //       MediaLibrary.createAlbumAsync('AppPhotos', asset, false)
-    //         .then(() => {
-    //           console.log('File Saved Successfully!');
-    //         })
-    //         .catch(() => {
-    //           console.log('Error In Saving File!');
-    //         });
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   } else {
-    //     console.log('Need Storage permission to save file');
-    //   }
-    // };
