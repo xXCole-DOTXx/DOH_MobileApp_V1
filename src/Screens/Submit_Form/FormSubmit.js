@@ -3,9 +3,9 @@ import { Button, View, Text, TextInput, Picker } from 'react-native';
 import { Header } from 'react-native-elements';
 import { styles } from './styles.js';
 import * as ImagePicker from 'expo-image-picker';
-import * as MediaLibrary from 'expo-media-library';
 import { RNS3 } from 'react-native-aws3';
 import Modal from 'react-native-modal';
+import { config } from '../../config';
 
 const FormSubmit = ({navigation, route}) => {
     const [Name, onChangeName] = useState(null);
@@ -90,7 +90,7 @@ const FormSubmit = ({navigation, route}) => {
           RoadName: RoadName,
           MileMarker: MileMarker,
           Comments: Comments,
-          Path: "https://rn-mobile-app-bucket.s3.us-east-2.amazonaws.com/Uploaded+Photos/" + Name + Phone
+          Path: "https://rn-mobile-app-bucket.s3.us-east-2.amazonaws.com/Uploaded+Photos/" + Name + Date.now()
         })
       }).then(response =>{
         if(response.ok){
@@ -103,17 +103,8 @@ const FormSubmit = ({navigation, route}) => {
     const saveImage = async () => {
       const file = {
         uri: image,
-        name: Name + Phone, //This needs to be a better naming convention
+        name: Name + Date.now(), //This needs to be a better naming convention
         type: 'image/png'
-      }
-      console.log("File: " + file); 
-      const config = {
-        keyPrefix: 'Uploaded Photos/',
-        bucket: 'rn-mobile-app-bucket',
-        region: 'us-east-2',
-        accessKey: 'AKIA3OOUK4FCMI33OUFG',
-        secretKey: '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',
-        successActionStatus: 201
       }
       RNS3.put(file, config).then((response) => {
         console.log(response);
